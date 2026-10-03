@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PVPGB – Dashboard KPI SXKD tháng 9 và 9 tháng 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#009D48;--green-d:#00753A;--green-m:#5BBF86;--green-l:#E6F5EC;--navy:#364185;--navy-d:#242C63;--navy-m:#8A91C3;--navy-l:#ECEEF7;--ink:#1F2547;--muted:#62688A;--line:#DEE1EC;--bg:#F4F5F9;--amber:#F59E0B;--amber-d:#A86200;--amber-l:#FEF2D9;--grey:#C5C9D8;--f:'Barlow','Segoe UI',Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#D9DDEA;font-family:var(--f);color:var(--ink)}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:50% 50%;background:var(--bg);box-shadow:0 10px 40px rgba(36,44,99,.25);overflow:hidden}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.slide.on{opacity:1;visibility:visible}
+
+/* Header */
+.hd{position:absolute;left:0;right:0;top:0;height:112px;background:#fff;display:flex;align-items:center;padding:0 40px;gap:28px}
+.hd::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:4px;background:linear-gradient(90deg,var(--green) 0 62%,var(--navy) 62% 100%)}
+.logo{height:66px;display:flex;align-items:center}
+.logo img{height:66px;width:auto;display:block}
+.lt{display:flex;flex-direction:column;line-height:1.05}
+.lt b{font-size:34px;font-weight:700;color:var(--navy);letter-spacing:.5px}
+.lt span{font-size:14px;color:var(--green-d);font-weight:600}
+.sep{width:1px;height:58px;background:var(--line)}
+.ttl h1{font-size:38px;font-weight:700;color:var(--navy);line-height:1.1}
+.ttl p{font-size:19px;color:var(--muted);margin-top:4px}
+.tabs{margin-left:auto;display:flex;background:var(--navy-l);border-radius:999px;padding:5px}
+.tabs button{font:600 18px var(--f);color:var(--navy);background:none;border:0;padding:10px 22px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
+.tabs button.on{background:var(--navy);color:#fff}
+.tabs button:focus-visible,.nav button:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+
+/* Body & footer */
+.bd{position:absolute;top:116px;bottom:58px;left:0;right:0;padding:22px 40px 14px;display:grid;gap:22px}
+#s1 .bd{grid-template-rows:252px 1fr 132px}
+#s2 .bd{grid-template-rows:244px 1fr 180px}
+#s3 .bd{grid-template-rows:200px 1fr}
+#s4 .bd{grid-template-rows:236px 1fr 218px}
+.ft{position:absolute;left:0;right:0;bottom:0;height:58px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 40px;font-size:16px;color:var(--muted)}
+.ft b{color:var(--navy);font-weight:600}
+.nav{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:58px;display:flex;align-items:center;gap:16px;z-index:5}
+.nav button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--navy);font:700 22px var(--f);cursor:pointer;line-height:1}
+.nav button:hover{background:var(--navy);color:#fff}
+.dots{display:flex;gap:10px}
+.dots i{width:11px;height:11px;border-radius:50%;background:var(--grey);cursor:pointer;transition:all .25s}
+.dots i.on{background:var(--green);width:30px;border-radius:6px}
+
+/* KPI cards */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+#s2 .kpis{grid-template-columns:repeat(7,1fr);gap:16px}
+.kpi{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px 14px 22px;display:flex;flex-direction:column;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--navy-m)}
+.kpi.win{border-color:#BFE6CF;animation:glow 1.8s ease .7s both}
+.kpi.win::before{background:var(--green)}
+.kpi.warn::before{background:var(--amber)}
+.k-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:19px;font-weight:600}
+.k-top small{font-size:15px;color:var(--muted);font-weight:500;white-space:nowrap}
+.k-val{font-size:48px;font-weight:700;color:var(--navy);line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.win .k-val{color:var(--green-d)}
+.badge{position:relative;overflow:hidden;align-self:flex-start;margin-top:8px;font-size:16px;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--navy-l);color:var(--navy);white-space:nowrap}
+.win .badge{background:var(--green);color:#fff}
+.warn .badge{background:var(--amber-l);color:var(--amber-d)}
+.win .badge::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 25%,rgba(255,255,255,.85) 50%,transparent 75%);transform:translateX(-130%);animation:sweep 1.2s ease 1.2s 1 both}
+.k-bot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.meta{font-size:15px;color:var(--muted);display:grid;grid-template-columns:auto auto;column-gap:10px;row-gap:1px;line-height:1.35}
+.meta b{color:var(--ink);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.ring{width:78px;height:78px;flex:none}
+#s2 .k-top{font-size:17px}#s2 .k-top small{font-size:14px}
+#s2 .k-val{font-size:40px}
+#s2 .badge{font-size:14.5px;padding:3px 10px}
+#s2 .meta{font-size:14px}
+#s2 .ring{width:68px;height:68px}
+
+/* Panels */
+.row{display:grid;gap:22px;min-height:0}
+.pn{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 20px 12px;display:flex;flex-direction:column;min-height:0;min-width:0}
+.pn-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.pn-h h3{font-size:20px;font-weight:600;color:var(--navy);white-space:nowrap}
+.pn-h h3 small{font-size:15px;color:var(--muted);font-weight:500;margin-left:6px}
+.lg{display:flex;gap:14px;font-size:14.5px;color:var(--muted);flex-wrap:wrap;justify-content:flex-end}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.cv{flex:1;min-height:0;position:relative}
+svg text{font-family:var(--f);font-variant-numeric:tabular-nums}
+.vl{font-size:15px;font-weight:600;fill:var(--ink)}
+.vt{font-size:17px;font-weight:700;fill:var(--navy)}
+.vi{font-size:14px;font-weight:600;fill:#fff}
+.gl{font-size:17px;font-weight:600;fill:var(--navy)}
+.gs{font-size:14px;font-weight:500;fill:var(--muted)}
+.axis{stroke:#B9BED3;stroke-width:1.2}
+.cn{stroke:#9AA0BF;stroke-dasharray:4 4;stroke-width:1.2}
+
+/* Price bars, ops, bullet, debt */
+.pb{margin-top:10px}
+.pb+.pb{margin-top:28px}
+.pb-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.pb-h b{font-size:18px;color:var(--navy)}
+.chip{font-size:15px;font-weight:600;padding:3px 11px;border-radius:999px;background:var(--navy-l);color:var(--navy);white-space:nowrap}
+.chip.good{background:var(--green-l);color:var(--green-d)}
+.chip.warn{background:var(--amber-l);color:var(--amber-d)}
+.pr{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:10px;height:36px}
+.pr span{font-size:15.5px;color:var(--muted)}
+.trk{display:flex;align-items:center;gap:8px;height:24px}
+.trk i{display:block;height:22px;border-radius:3px}
+.trk em{font-style:normal;font-size:16px;font-weight:700;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ops{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.op{background:#fff;border:1px solid var(--line);border-radius:12px;display:grid;grid-template-columns:220px repeat(4,1fr);align-items:stretch;padding:14px 0}
+.op>div{padding:0 18px;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.op>div+div{border-left:1px solid var(--line)}
+.op .nm b{font-size:20px;color:var(--navy)}
+.op .nm span{font-size:15px;color:var(--muted)}
+.op label{font-size:15px;color:var(--muted)}
+.op strong{font-size:28px;font-weight:700;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.op strong small{font-size:15px;font-weight:500;color:var(--muted);margin-left:4px}
+.op .chip{align-self:flex-start;font-size:13.5px;padding:2px 9px}
+.bl{display:grid;grid-template-columns:170px 1fr 250px;align-items:center;gap:16px;height:54px}
+.bl .nm{font-size:17px;font-weight:600;color:var(--navy)}
+.btrk{position:relative;height:26px;background:#F0F2F7;border-radius:4px}
+.btrk i{position:absolute;left:0;top:3px;bottom:3px;border-radius:3px}
+.btrk .mk{position:absolute;top:-7px;bottom:-7px;width:3px;background:var(--navy)}
+.btrk .mk span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:13px;color:var(--navy);white-space:nowrap;font-weight:600}
+.bv{display:flex;flex-direction:column;line-height:1.2}
+.bv b{font-size:20px;font-variant-numeric:tabular-nums}
+.bv span{font-size:13.5px;color:var(--muted)}
+.debt{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.dl{display:flex;font-size:15px;font-weight:600}
+.dl div{border-bottom:2px solid;padding-bottom:3px;margin:0 2px;white-space:nowrap}
+.dbar{display:flex;height:46px;border-radius:5px;overflow:hidden}
+.dbar div{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden}
+.stripe{background:repeating-linear-gradient(135deg,#F59E0B 0 8px,#F7B23F 8px 16px)}
+.dlg{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14.5px;color:var(--muted)}
+.dlg b{color:var(--ink)}
+.dlg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.dnw{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;align-items:start;margin-top:12px}
+.dnc{display:flex;flex-direction:column;align-items:center;gap:8px}
+.dnc h4{font-size:16px;color:var(--muted);font-weight:600}
+.dlist{font-size:15px;width:100%;max-width:240px}
+.dlist div{display:grid;grid-template-columns:16px 1fr auto auto;gap:6px;align-items:center;line-height:1.5}
+.dlist i{width:11px;height:11px;border-radius:3px}
+.dlist b{font-variant-numeric:tabular-nums}
+.dlist em{font-style:normal;color:var(--muted);min-width:52px;text-align:right}
+
+/* Slide 3 */
+.gauges{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+.gp{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 18px;display:flex;flex-direction:column;align-items:center}
+.gp.win{border-color:#BFE6CF;animation:glow 1.8s ease .9s both}
+.gp-h{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline;font-size:19px;font-weight:600}
+.gp-h small{font-size:14px;color:var(--muted);font-weight:500}
+.gp svg{width:240px;height:110px;margin-top:2px}
+.gp .s{font-size:16.5px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:4px}
+.gp .x{font-size:14.5px;color:var(--muted)}
+.r3{grid-template-columns:820px 1fr 520px}
+.stabs{display:flex;gap:6px;margin:4px 0 8px}
+.stabs button{font:600 16px var(--f);color:var(--navy);background:var(--navy-l);border:0;padding:8px 16px;border-radius:999px;cursor:pointer}
+.stabs button.on{background:var(--green);color:#fff}
+.stabs button:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+.tb{width:100%;border-collapse:collapse;font-size:16.5px;margin-top:8px}
+.tb th{background:var(--green);color:#fff;font-weight:600;padding:6px 12px;text-align:right}
+.tb td{padding:5px 12px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tb th:first-child,.tb td:first-child{text-align:left}
+.tb tr:nth-child(even) td{background:#F3FAF6}
+.tb tr.cn td{font-weight:700;color:var(--navy)}
+.tb td.q{font-weight:700;background:var(--green-l)!important}
+.tb td.ng{color:var(--amber-d)}
+.qsec{font-size:15.5px;font-weight:600;color:var(--muted);margin:10px 0 2px}
+.qr{display:grid;grid-template-columns:92px 1fr 76px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #EEF0F6}
+.ql{font-size:16.5px;font-weight:600;color:var(--navy);line-height:1.15}
+.qb{display:flex;flex-direction:column;gap:5px}
+.qt{display:flex;align-items:center;gap:7px;height:20px}
+.qt i{display:block;height:18px;border-radius:3px}
+.qt span{font-size:15px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.qd{position:relative;height:20px}
+.qd .z{position:absolute;top:-3px;bottom:-3px;width:2px;background:#9AA0BF}
+.qd i{position:absolute;top:1px;height:18px;border-radius:3px}
+.qd span{position:absolute;top:0;font-size:15px;font-weight:600;line-height:20px;white-space:nowrap}
+.qc{justify-self:end}
+.yr{display:grid;grid-template-columns:118px 1fr 96px;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #EEF0F6}
+.yr:last-child{border-bottom:0}
+.yr .ql small{display:block;font-size:13.5px;color:var(--muted);font-weight:500}
+.yl{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.yl span{color:var(--muted);font-weight:500;margin:0 8px}
+.cr{display:grid;grid-template-columns:120px 1fr 250px;align-items:center;gap:16px;height:42px;margin-top:6px}
+.cr .nm{font-size:17px;font-weight:600;color:var(--navy)}
+.cbar{position:absolute;left:0;top:3px;bottom:3px;display:flex;border-radius:3px;overflow:hidden}
+.cbar b{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden}
+.tasks h3{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.tasks ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.tasks li{position:relative;padding-left:22px;font-size:18px;line-height:1.35}
+.tasks li::before{content:'';position:absolute;left:2px;top:9px;width:9px;height:9px;border-radius:2px;background:var(--green)}
+.tasks .kn li::before{background:var(--navy)}
+.tasks .kn{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+
+/* Focus dimming theo tab nhà máy */
+.slide [data-u]{transition:opacity .3s}
+.slide[data-focus=sh1] .bd [data-u=tb2],.slide[data-focus=sh1] .bd [data-u=oth],
+.slide[data-focus=tb2] .bd [data-u=sh1],.slide[data-focus=tb2] .bd [data-u=oth]{opacity:.2}
+
+/* Motion */
+.bar{transform-box:fill-box;transform-origin:50% 100%;animation:gy .8s cubic-bezier(.2,.8,.2,1) both}
+.bar.neg{transform-origin:50% 0}
+.hb{transform-origin:0 50%;animation:gx .9s cubic-bezier(.2,.8,.2,1) both}
+.hbr{transform-origin:100% 50%;animation:gx .9s cubic-bezier(.2,.8,.2,1) both}
+.fade{animation:fd .6s ease both}
+.arc{animation:ring 1s cubic-bezier(.3,.7,.2,1) .2s both}
+.arc2{animation-delay:1.15s}
+.dn{animation:dn 1s cubic-bezier(.3,.7,.2,1) both}
+@keyframes gy{from{transform:scaleY(0)}}
+@keyframes gx{from{transform:scaleX(0)}}
+@keyframes fd{from{opacity:0}}
+@keyframes ring{from{stroke-dashoffset:var(--c)}}
+@keyframes dn{from{stroke-dasharray:0 var(--c)}}
+@keyframes sweep{to{transform:translateX(130%)}}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(0,157,72,0)}35%{box-shadow:0 0 0 7px rgba(0,157,72,.22)}100%{box-shadow:0 0 0 3px rgba(0,157,72,.10)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.noanim *,.noanim *::before,.noanim *::after{animation:none!important;transition:none!important}
+
+@media print{
+ @page{size:A4 landscape;margin:0}
+ html,body{height:auto;overflow:visible;background:#fff}
+ .stage{position:static;transform:none!important;width:1920px;height:auto;box-shadow:none;background:none}
+ .slide{position:relative;width:1920px;height:1080px;opacity:1!important;visibility:visible!important;background:var(--bg);zoom:.584;break-after:page;page-break-after:always}
+ .nav{display:none}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+<!-- SLIDE 1 -->
+<section class="slide" id="s1" data-focus="cn">
+ <header class="hd">
+  <div class="logo"></div><div class="sep"></div>
+  <div class="ttl"><h1>Kết quả SXKD tháng 9/2026</h1><p>Chi nhánh Phát điện Dầu khí – thực hiện so kế hoạch tháng</p></div>
+  <div class="tabs" role="tablist"><button class="on" data-u="cn">Toàn Chi nhánh</button><button data-u="sh1">NMĐ Sông Hậu 1</button><button data-u="tb2">NMĐ Thái Bình 2</button></div>
+ </header>
+ <div class="bd">
+  <div class="kpis" id="s1k"></div>
+  <div class="row" style="grid-template-columns:1fr 1fr 1fr">
+   <div class="pn"><div class="pn-h"><h3>Sản lượng điện theo nhà máy<small>tr.kWh</small></h3><div class="lg"><span><i style="background:#C5C9D8"></i>CK 2025</span><span><i style="background:#364185"></i>KHCS</span><span><i style="background:#8A91C3"></i>KHQT</span><span><i style="background:#009D48"></i>TH</span></div></div><div class="cv" id="s1a"></div></div>
+   <div class="pn"><div class="pn-h"><h3>LNST: từ kế hoạch đến thực hiện<small>tỷ đồng</small></h3></div><div class="cv" id="s1b"></div></div>
+   <div class="pn"><div class="pn-h"><h3>Giá bán Pc và giá thành<small>đ/kWh</small></h3></div><div class="cv" id="s1c"></div></div>
+  </div>
+  <div class="ops" id="s1d"></div>
+ </div>
+ <footer class="ft"><span>Nguồn: <b>CV số 1883/CNPĐ-KTKH ngày 30/9/2026</b></span><span>1 / 4</span></footer>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide" id="s2" data-focus="cn">
+ <header class="hd">
+  <div class="logo"></div><div class="sep"></div>
+  <div class="ttl"><h1>Kết quả SXKD 9 tháng đầu năm 2026</h1><p>Lũy kế đến 30/9/2026 so kế hoạch và cùng kỳ 2025</p></div>
+  <div class="tabs" role="tablist"><button class="on" data-u="cn">Toàn Chi nhánh</button><button data-u="sh1">NMĐ Sông Hậu 1</button><button data-u="tb2">NMĐ Thái Bình 2</button></div>
+ </header>
+ <div class="bd">
+  <div class="kpis" id="s2k"></div>
+  <div class="row" style="grid-template-columns:1fr 1fr 1fr">
+   <div class="pn"><div class="pn-h"><h3>Sản lượng 9 tháng<small>tr.kWh</small></h3><div class="lg"><span><i style="background:#C5C9D8"></i>CK 2025</span><span><i style="background:#364185"></i>KHCS</span><span><i style="background:#8A91C3"></i>KHQT</span><span><i style="background:#009D48"></i>TH</span></div></div><div class="cv" id="s2a"></div></div>
+   <div class="pn"><div class="pn-h"><h3>LNST 9 tháng: kế hoạch đến thực hiện<small>tỷ đồng</small></h3></div><div class="cv" id="s2b"></div></div>
+   <div class="pn"><div class="pn-h"><h3>Cơ cấu theo đơn vị<small>tỷ đồng</small></h3></div><div class="dnw" id="s2c"></div></div>
+  </div>
+  <div class="row" style="grid-template-columns:1fr 1fr">
+   <div class="pn"><div class="pn-h"><h3>Chi phí thực hiện so kế hoạch<small>tỷ đồng</small></h3></div><div id="s2d" style="margin-top:8px"></div></div>
+   <div class="pn"><div class="pn-h"><h3>Tiền điện đến 29/9/2026<small>tỷ đồng</small></h3></div><div id="s2e"></div></div>
+  </div>
+ </div>
+ <footer class="ft"><span>Nguồn: <b>CV số 1883/CNPĐ-KTKH ngày 30/9/2026</b></span><span>2 / 4</span></footer>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide" id="s3">
+ <header class="hd">
+  <div class="logo"></div><div class="sep"></div>
+  <div class="ttl"><h1>Ước thực hiện năm 2026 và kế hoạch Quý IV</h1><p>ƯTH năm so KHCS; kế hoạch tháng 10, 11, 12</p></div>
+ </header>
+ <div class="bd">
+  <div class="gauges" id="s3g"></div>
+  <div class="row r3">
+   <div class="pn">
+    <div class="pn-h"><h3>Kế hoạch Quý IV theo tháng<small id="q4u">tr.kWh</small></h3><div class="lg" id="q4lg"></div></div>
+    <div class="stabs" role="tablist"><button class="on" data-t="sl">Sản lượng</button><button data-t="dt">Doanh thu</button><button data-t="cp">Chi phí</button><button data-t="ln">Lợi nhuận</button><button data-t="ns">Nộp NSNN</button></div>
+    <div class="cv" id="q4cv"></div>
+    <div id="q4tb"></div>
+   </div>
+   <div class="pn"><div class="pn-h" style="flex-direction:column;gap:2px"><h3>Quý IV: kế hoạch và mức ngầm định</h3><div class="lg" style="justify-content:flex-start">Ngầm định = ƯTH năm − TH 9 tháng</div></div>
+    <div class="lg" style="justify-content:flex-start;margin-top:4px"><span><i style="background:#364185"></i>KH Quý IV</span><span><i style="background:#009D48"></i>Ngầm định</span></div>
+    <div id="q4c"></div></div>
+   <div class="pn tasks" id="q4t"></div>
+  </div>
+ </div>
+ <footer class="ft"><span>Nguồn: <b>CV số 1883/CNPĐ-KTKH ngày 30/9/2026</b></span><span>3 / 4</span></footer>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide" id="s4" data-focus="cn">
+ <header class="hd">
+  <div class="logo"></div><div class="sep"></div>
+  <div class="ttl"><h1>Ước thực hiện cả năm 2026</h1><p>So kế hoạch HĐTV (KHCS), KH quản trị và thực hiện năm 2025</p></div>
+  <div class="tabs" role="tablist"><button class="on" data-u="cn">Toàn Chi nhánh</button><button data-u="sh1">NMĐ Sông Hậu 1</button><button data-u="tb2">NMĐ Thái Bình 2</button></div>
+ </header>
+ <div class="bd">
+  <div class="kpis" id="s4k"></div>
+  <div class="row" style="grid-template-columns:1fr 1fr 1fr">
+   <div class="pn"><div class="pn-h"><h3>Sản lượng cả năm<small>tr.kWh</small></h3><div class="lg"><span><i style="background:#C5C9D8"></i>Năm 2025</span><span><i style="background:#364185"></i>KHCS</span><span><i style="background:#8A91C3"></i>KHQT</span><span><i style="background:#009D48"></i>TH 9T</span><span><i style="background:#5BBF86"></i>Q4 ƯTH</span></div></div><div class="cv" id="s4a"></div></div>
+   <div class="pn"><div class="pn-h"><h3>LNST năm: kế hoạch đến ước thực hiện<small>tỷ đồng</small></h3></div><div class="cv" id="s4b"></div></div>
+   <div class="pn"><div class="pn-h"><h3 id="s4ct">So với năm 2025</h3><div class="lg"><span><i style="background:#C5C9D8"></i>2025</span><span><i style="background:#009D48"></i>ƯTH 2026</span></div></div><div id="s4c"></div></div>
+  </div>
+  <div class="pn"><div class="pn-h"><h3 id="s4dt">Cấu thành ước thực hiện năm<small>tỷ đồng</small></h3><div class="lg"><span><i style="background:#364185"></i>TH 9 tháng</span><span><i style="background:#5BBF86"></i>Quý IV ngầm định</span><span><i style="background:#242C63;width:3px;height:16px;vertical-align:-3px"></i>KHCS năm</span></div></div><div id="s4d" style="margin-top:4px"></div></div>
+ </div>
+ <footer class="ft"><span>Nguồn: <b>CV số 1883/CNPĐ-KTKH ngày 30/9/2026, Phụ lục 01</b></span><span>4 / 4</span></footer>
+</section>
+
+<div class="nav"><button id="prev" aria-label="Slide trước">‹</button><div class="dots" id="dots"></div><button id="next" aria-label="Slide sau">›</button></div>
+</div>
+
+<script>
+/* Logo PVPGB gốc: dán chuỗi data:image/png;base64,... vào LOGO_SRC (giữ nguyên file, không chỉnh sửa) */
+const LOGO_SRC = '';
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C={g:'#009D48',gd:'#00753A',gm:'#5BBF86',n:'#364185',nd:'#242C63',nm:'#8A91C3',a:'#F59E0B',ad:'#A86200',gr:'#C5C9D8'};
+function fmt(n,d=1){const s=Math.abs(n).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});return (n<0&&Math.abs(n)>=Math.pow(10,-d)/2?'−':'')+s}
+const sg=(n,d=1)=>(n>0?'+':'')+fmt(n,d);
+const fv=v=>fmt(v,Number.isInteger(v)?0:1);
+
+/* ===== DỮ LIỆU ===== */
+const SER4=[{c:C.gr},{c:C.n},{c:C.nm},{c:C.g,hl:1}],SER4a=[{c:C.gr},{c:C.n},{c:C.nm},{c:C.g,hl:1,d:0}];
+const T9={
+ cn:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:1160,d:0,st:'win',r:{p:153,t:'153%'},b:'▲ Vượt KHCS +53%',m:[['KHCS','756,6'],['KHQT','140%'],['Cùng kỳ','+31%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:2346.9,st:'win',r:{p:120,t:'120%'},b:'▲ Vượt KHCS +20%',m:[['KHCS','1.954,9'],['Cùng kỳ','+32,4%']]},
+  {l:'Chi phí',u:'tỷ đồng',v:2215.8,st:'warn',r:{p:108,t:'108%'},b:'▲ Cao hơn KH 8%',m:[['KH','2.049,2'],['SL/KHCS','153%']]},
+  {l:'LNST',u:'tỷ đồng',v:131.1,st:'win',r:{p:100,t:'+225,4'},b:'▲ Vượt KH +225,4 tỷ',m:[['KH','−94,3'],['Cùng kỳ','+457,1']]},
+  {l:'Giá thành',u:'đ/kWh',v:1910,d:0,st:'win',r:{p:70.5,t:'70,5%'},b:'▼ Thấp hơn KH 29,5%',m:[['SH1','2.067'],['TB2','1.804']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:141.4,st:'win',r:{p:233,t:'233%'},b:'▲ Vượt KH +133%',m:[['KH','60,6'],['SH1','69,4'],['TB2','72,0']]}],
+ sh1:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:470,d:0,st:'win',r:{p:133,t:'133%'},b:'▲ Vượt KHCS +33%',m:[['KHCS','354,3'],['KHQT','121%'],['Cùng kỳ','−6,4%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:932.3,st:'win',r:{p:113,t:'113%'},b:'▲ Vượt KHCS +13%',m:[['KHCS','825,3'],['Pc','2.130,53']]},
+  {l:'Chi phí',u:'tỷ đồng',v:970.7,st:'win',r:{p:89,t:'89%'},b:'▼ Thấp hơn KH 11%',m:[['KH','1.089,4'],['Than so KH','−282,5'],['BDSC đột xuất','67,3']]},
+  {l:'LNST',u:'tỷ đồng',v:-38.4,st:'win',r:{p:100,t:'+225,7'},b:'▲ Giảm lỗ 225,7 tỷ',m:[['KH','−264,1']]},
+  {l:'Giá thành',u:'đ/kWh',v:2067,d:0,st:'neu',r:null,b:'Pc 2.130,53 đ/kWh',m:[['Biên Pc − GT','+63,5'],['FMP bq','1.465,70']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:69.4,st:'neu',r:{p:49.1,t:'49,1%'},b:'Tỷ trọng toàn CN',m:[]}],
+ tb2:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:690,d:0,st:'win',r:{p:172,t:'172%'},b:'▲ Vượt KHCS +72%',m:[['KHCS','402,3'],['KHQT','156%'],['Vượt Qc','+180,8']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:1414.6,st:'win',r:{p:125,t:'125%'},b:'▲ Vượt KHCS +25%',m:[['KHCS','1.129,6'],['Pc','2.201,30']]},
+  {l:'Chi phí',u:'tỷ đồng',v:1243.9,st:'warn',r:{p:132,t:'132%'},b:'▲ Cao hơn KH 32%',m:[['KH','946,0'],['Chi phí than','921,3']]},
+  {l:'LNST',u:'tỷ đồng',v:170.7,st:'warn',r:{p:93,t:'93%'},b:'▼ Thấp hơn KH 12,9 tỷ',m:[['KH','183,6']]},
+  {l:'Giá thành',u:'đ/kWh',v:1804,d:0,st:'neu',r:null,b:'Pc 2.201,30 đ/kWh',m:[['Biên Pc − GT','+397,3']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:72.0,st:'neu',r:{p:50.9,t:'50,9%'},b:'Tỷ trọng toàn CN',m:[]}]
+};
+const T9M={
+ cn:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:10737.9,st:'win',r:{p:109,t:'109%'},b:'▲ Vượt KHCS +9%',m:[['KHCS','9.872,3'],['KHQT','99%'],['Cùng kỳ','+15%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:21417.1,st:'win',r:{p:104,t:'104%'},b:'▲ Vượt KHCS +4%',m:[['KHCS','20.517,6'],['Cùng kỳ','+6,7%']]},
+  {l:'Chi phí',u:'tỷ đồng',v:20459.9,st:'win',r:{p:99.8,t:'99,8%'},b:'▼ Thấp hơn KH 31,4 tỷ',m:[['KH','20.491,3']]},
+  {l:'LNST',u:'tỷ đồng',v:957.3,st:'win',r:{p:100,t:'+931,0'},b:'▲ Vượt KH +931,0 tỷ',m:[['KH','26,3'],['Cùng kỳ','+721,4']]},
+  {l:'Giá thành',u:'đ/kWh',v:1905,d:0,st:'win',r:{p:91.8,t:'91,8%'},b:'▼ Thấp hơn KH 8,2%',m:[['SH1','2.001,7'],['TB2','1.827,8']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:1512.3,st:'win',r:{p:209,t:'209%'},b:'▲ Vượt KH +109%',m:[['KH','723,0'],['Cùng kỳ','+29,3%']]},
+  {l:'Tiền điện đã thu',u:'tỷ đồng',v:20665.2,st:'neu',r:{p:80.6,t:'80,6%'},b:'Còn phải thu 4.968,4',m:[['Tạm tính','2.821,1']]}],
+ sh1:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:4789.3,st:'win',r:{p:101,t:'101%'},b:'▲ Vượt KHCS +1%',m:[['KHCS','4.749,9'],['KHQT','92%'],['Cùng kỳ','−7,6%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:9193.1,st:'warn',r:{p:97,t:'97%'},b:'▼ 97% KHCS',m:[['KHCS','9.487,3']]},
+  {l:'Chi phí',u:'tỷ đồng',v:9556.4,st:'win',r:{p:91,t:'91%'},b:'▼ Thấp hơn KH 9%',m:[['KH','10.470,5']]},
+  {l:'LNST',u:'tỷ đồng',v:-363.2,st:'win',r:{p:100,t:'+620,0'},b:'▲ Giảm lỗ 620,0 tỷ',m:[['KH','−983,2']]},
+  {l:'Giá thành',u:'đ/kWh',v:2001.7,st:'win',r:{p:90.3,t:'90,3%'},b:'▼ Thấp hơn KH 9,7%',m:[]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:1031.2,st:'neu',r:{p:68.2,t:'68,2%'},b:'Tỷ trọng toàn CN',m:[]},
+  {l:'Tiền điện đã thu',u:'tỷ đồng',v:8921.5,st:'neu',r:{p:43.2,t:'43,2%'},b:'Tỷ trọng tiền đã thu',m:[]}],
+ tb2:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:5948.6,st:'win',r:{p:116,t:'116%'},b:'▲ Vượt KHCS +16%',m:[['KHCS','5.122,4'],['KHQT','106%'],['Cùng kỳ','+43,8%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:12224.0,st:'win',r:{p:111,t:'111%'},b:'▲ Vượt KHCS +11%',m:[['KHCS','11.030,3']]},
+  {l:'Chi phí',u:'tỷ đồng',v:10842.7,st:'warn',r:{p:110,t:'110%'},b:'▲ Cao hơn KH 10%',m:[['KH','9.902,5'],['Than','7.539,4']]},
+  {l:'LNST',u:'tỷ đồng',v:1381.3,st:'win',r:{p:122.5,t:'122%'},b:'▲ Vượt KH +253,5 tỷ',m:[['KH','1.127,9']]},
+  {l:'Giá thành',u:'đ/kWh',v:1827.8,st:'win',r:{p:94,t:'94%'},b:'▼ Thấp hơn KH 6%',m:[]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:476.9,st:'neu',r:{p:31.5,t:'31,5%'},b:'Tỷ trọng toàn CN',m:[]},
+  {l:'Tiền điện đã thu',u:'tỷ đồng',v:11743.7,st:'neu',r:{p:56.8,t:'56,8%'},b:'Tạm tính Fc 2.821,1',m:[]}]
+};
+const Q4={m:['Tháng 10','Tháng 11','Tháng 12'],
+ sl:{cn:[819.9,1007.1,1196.2,3023.2],sh1:[520.4,575.7,597.9,1694.0],tb2:[299.5,431.3,598.3,1329.2]},
+ dt:{cn:[1842.7,2238.8,3168.0,7249.5],sh1:[1183.2,1280.1,1833.1,4296.4],tb2:[659.5,958.7,1334.9,2953.1]},
+ cp:{cn:[2093.1,2350.8,2636.7,7080.6],sh1:[1269.8,1350.9,1466.0,4086.7],tb2:[810.8,987.3,1158.0,2956.0],cq:[12.6,12.6,12.6,37.9]},
+ ln:{cn:[-250.5,-112.0,531.4,168.9],sh1:[-86.6,-70.8,367.1,209.7],tb2:[-151.3,-28.6,176.9,-3.0],cq:[-12.6,-12.6,-12.6,-37.9]},
+ ns:{cn:[82.1,77.8,128.1,288.0]}};
+
+/* ===== THÀNH PHẦN ===== */
+function ring(r,st){
+ if(!r) return '';
+ const L=201.06,l1=Math.min(r.p,100)/100*L,l2=r.p>100?Math.min(r.p-100,100)/100*L:0;
+ const col=st==='win'?C.g:st==='warn'?C.a:C.nm, tc=st==='win'?C.gd:st==='warn'?C.ad:C.n;
+ return `<svg class="ring" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="#E7E9F1" stroke-width="8"/>
+ <circle class="arc" cx="40" cy="40" r="32" fill="none" stroke="${col}" stroke-width="8" stroke-dasharray="${L}" style="--c:${L};stroke-dashoffset:${L-l1}" transform="rotate(-90 40 40)"/>
+ ${l2?`<circle class="arc arc2" cx="40" cy="40" r="32" fill="none" stroke="${C.gd}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${L}" style="--c:${L};stroke-dashoffset:${L-l2}" transform="rotate(-90 40 40)"/>`:''}
+ <text x="40" y="${r.t.length>5?45:46}" text-anchor="middle" font-size="${r.t.length>5?14:r.t.length>4?16:18}" font-weight="700" fill="${tc}">${r.t}</text></svg>`;
+}
+function card(k){
+ const d=k.d??1;
+ return `<div class="kpi ${k.st}"><div class="k-top"><span>${k.l}</span><small>${k.u}</small></div>
+ <div class="k-val" data-v="${k.v}" data-d="${d}">${fmt(k.v,d)}</div>
+ <span class="badge">${k.b}</span>
+ <div class="k-bot"><div class="meta">${(k.m||[]).map(([a,b])=>`<span>${a}</span><b>${b}</b>`).join('')}</div>${ring(k.r,k.st)}</div></div>`;
+}
+function countUp(root){
+ if(RM||document.body.classList.contains('noanim')) return;
+ $$('.k-val',root).forEach(el=>{
+  const v=+el.dataset.v,d=+el.dataset.d,t0=performance.now(),dur=1100;
+  const step=t=>{const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=fmt(v*e,d);if(k<1)requestAnimationFrame(step)};
+  el.textContent=fmt(0,d);requestAnimationFrame(step);
+ });
+}
+const svgO=(w,h)=>`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
+
+function gbar(el,o){
+ const w=el.clientWidth,h=el.clientHeight,m={t:30,r:8,b:o.sub?58:40,l:8};
+ const sum=x=>Array.isArray(x)?x.reduce((a,b)=>a+b,0):x,all=o.groups.flatMap(g=>g.v.map(sum));let mx=Math.max(0,...all),mn=Math.min(0,...all);const sp=(mx-mn)||1;mx+=sp*.14;if(mn<0)mn-=sp*.17;
+ const ih=h-m.t-m.b,iw=w-m.l-m.r,Y=v=>m.t+(mx-v)/(mx-mn)*ih;
+ const n=o.series.length,gw=iw/o.groups.length,inner=gw*(o.inner||.84),slot=inner/n,bw=Math.min(slot*.8,o.maxBw||64);
+ let s=svgO(w,h)+`<line class="axis" x1="${m.l}" x2="${w-m.r}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+ o.groups.forEach((g,gi)=>{
+  const gx=m.l+gi*gw+(gw-inner)/2;s+=`<g data-u="${g.u||'all'}">`;
+  g.v.forEach((v,si)=>{
+   if(Array.isArray(v)){const cx=gx+slot*si+slot/2,se=o.series[si];let acc=0;
+    s+=`<g class="bar" style="animation-delay:${gi*140+si*70}ms">`;
+    v.forEach((p,pi)=>{const y1=Y(acc+p),hh=Y(acc)-Y(acc+p);s+=`<rect x="${cx-bw/2}" y="${y1}" width="${bw}" height="${hh}" fill="${se.cs[pi]}" stroke="#fff" stroke-width="1.5"/>`;acc+=p});
+    s+=`</g><text class="vl fade" x="${cx}" y="${Y(acc)-8}" text-anchor="middle" style="font-size:${o.fs||15}px;font-weight:700;fill:${C.gd};animation-delay:${450+gi*140+si*70}ms">${fmt(acc)}</text>`;return}
+   const cx=gx+slot*si+slot/2,y0=Y(0),yv=Y(v),top=Math.min(y0,yv),hh=Math.max(1.5,Math.abs(yv-y0)),se=o.series[si];
+   s+=`<rect class="bar${v<0?' neg':''}" x="${cx-bw/2}" y="${top}" width="${bw}" height="${hh}" rx="3" fill="${se.c}" style="animation-delay:${gi*140+si*70}ms"/>`;
+   s+=`<text class="vl fade" x="${cx}" y="${v<0?top+hh+18:top-8}" text-anchor="middle" style="font-size:${o.fs||15}px;animation-delay:${450+gi*140+si*70}ms${se.hl?';font-weight:700;fill:'+C.gd:''}">${fmt(v,se.d??1)}</text>`;
+  });
+  s+=`<text class="gl" x="${m.l+gi*gw+gw/2}" y="${h-(o.sub?32:12)}" text-anchor="middle">${g.l}</text>`;
+  if(o.sub)s+=`<text class="gs" x="${m.l+gi*gw+gw/2}" y="${h-10}" text-anchor="middle">${g.sub}</text>`;
+  s+='</g>';
+ });
+ el.innerHTML=s+'</svg>';
+}
+function wfall(el,o){
+ const w=el.clientWidth,h=el.clientHeight,m={t:34,r:8,b:44,l:8};let run=0;
+ const B=o.steps.map(st=>{let a,b;if(st.t==='tot'){a=0;b=st.v;run=st.v}else{a=run;b=run+st.v;run=b}return{...st,a,b}});
+ const vals=B.flatMap(x=>[x.a,x.b]);let mx=Math.max(0,...vals),mn=Math.min(0,...vals);const sp=mx-mn;mx+=sp*.13;if(mn<0)mn-=sp*.15;
+ const ih=h-m.t-m.b,iw=w-m.l-m.r,Y=v=>m.t+(mx-v)/(mx-mn)*ih,slot=iw/B.length,bw=Math.min(slot*.58,80);
+ let s=svgO(w,h)+`<line class="axis" x1="${m.l}" x2="${w-m.r}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+ B.forEach((x,i)=>{
+  const cx=m.l+slot*i+slot/2,top=Y(Math.max(x.a,x.b)),hh=Math.max(2,Math.abs(Y(x.a)-Y(x.b))),down=x.b<x.a;
+  const col=x.t==='tot'?(i===0?C.n:C.g):(x.v>=0?C.gm:C.a);
+  s+=`<g data-u="${x.u}"><rect class="bar${down?' neg':''}" x="${cx-bw/2}" y="${top}" width="${bw}" height="${hh}" rx="3" fill="${col}" style="animation-delay:${i*220}ms"/>`;
+  const lbl=x.t==='tot'?fmt(x.v):sg(x.v);
+  s+=`<text class="vl fade" x="${cx}" y="${down?top+hh+19:top-9}" text-anchor="middle" style="font-size:17px;font-weight:700;fill:${x.t==='tot'?(i===0?C.n:C.gd):(x.v>=0?C.gd:C.ad)};animation-delay:${300+i*220}ms">${lbl}</text>`;
+  s+=`<text class="gl" x="${cx}" y="${h-14}" text-anchor="middle" style="font-size:16px">${x.l}</text></g>`;
+  if(i<B.length-1){const nx=m.l+slot*(i+1)+slot/2-bw/2;s+=`<line class="cn fade" x1="${cx+bw/2}" x2="${nx}" y1="${Y(x.b)}" y2="${Y(x.b)}" style="animation-delay:${500+i*220}ms"/>`}
+ });
+ el.innerHTML=s+'</svg>';
+}
+function stacked(el,o){
+ const w=el.clientWidth,h=el.clientHeight,m={t:30,r:10,b:34,l:10},ih=h-m.t-m.b,iw=w-m.l-m.r,n=o.cats.length;
+ const tot=o.tot||o.cats.map((_,i)=>o.series.reduce((a,s)=>a+s.v[i],0)),mx=Math.max(...tot)*1.14,Y=v=>m.t+ih*(1-v/mx),slot=iw/n;
+ const L=o.line,bc=L?.40:.5,bw=Math.min(slot*(L?.36:.42),130);
+ let s=svgO(w,h)+`<line class="axis" x1="${m.l}" x2="${w-m.r}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+ o.cats.forEach((c,i)=>{
+  const cx=m.l+slot*i+slot*bc;let acc=0;s+=`<g class="bar" style="animation-delay:${i*150}ms">`;
+  o.series.forEach(se=>{const v=se.v[i],y1=Y(acc+v),hh=Y(acc)-Y(acc+v);
+   s+=`<rect x="${cx-bw/2}" y="${y1}" width="${bw}" height="${hh}" fill="${se.c}" stroke="#fff" stroke-width="1.5"/>`;
+   if(hh>26)s+=`<text class="vi" x="${cx}" y="${y1+hh/2+5}" text-anchor="middle">${fmt(v)}</text>`;acc+=v});
+  s+=`</g><text class="vt fade" x="${cx}" y="${Y(acc)-9}" text-anchor="middle" style="animation-delay:${500+i*150}ms">${fmt(tot[i])}</text>`;
+  s+=`<text class="gl" x="${m.l+slot*i+slot/2}" y="${h-9}" text-anchor="middle">${c}</text>`;
+ });
+ if(L){
+  const lm=Math.max(...L.v)*1.2,Y2=v=>m.t+ih*(1-v/lm),P=o.cats.map((_,i)=>[m.l+slot*i+slot*.80,Y2(L.v[i])]);
+  s+=`<polyline class="fade" points="${P.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${C.nd}" stroke-width="3" style="animation-delay:700ms"/>`;
+  P.forEach((p,i)=>{s+=`<circle class="fade" cx="${p[0]}" cy="${p[1]}" r="6.5" fill="#fff" stroke="${C.nd}" stroke-width="3" style="animation-delay:${750+i*120}ms"/><text class="fade" x="${p[0]}" y="${p[1]-14}" text-anchor="middle" style="font-size:15px;font-weight:700;fill:${C.nd};animation-delay:${800+i*120}ms">${fmt(L.v[i])}</text>`});
+ }
+ el.innerHTML=s+'</svg>';
+}
+function donut(o){
+ const R=76,sw=28,L=2*Math.PI*R,tot=o.p.reduce((a,x)=>a+x.v,0);let acc=0;
+ let s=`<svg viewBox="0 0 200 200" width="186" height="186"><circle cx="100" cy="100" r="${R}" fill="none" stroke="#EEF0F6" stroke-width="${sw}"/>`;
+ o.p.forEach((x,i)=>{const len=x.v/tot*L;s+=`<g data-u="${x.u}"><circle class="dn" cx="100" cy="100" r="${R}" fill="none" stroke="${x.c}" stroke-width="${sw}" stroke-dasharray="${len} ${L-len}" stroke-dashoffset="${-acc}" transform="rotate(-90 100 100)" style="--c:${L};animation-delay:${i*220}ms"/></g>`;acc+=len});
+ s+=`<text x="100" y="100" text-anchor="middle" style="font-size:25px;font-weight:700;fill:${C.n}">${o.c}</text><text x="100" y="122" text-anchor="middle" class="gs">${o.cs}</text></svg>`;
+ const lg=o.p.map(x=>`<div data-u="${x.u}"><i style="background:${x.c}"></i><span>${x.l}</span><b>${fmt(x.v)}</b><em>${fmt(x.v/tot*100)}%</em></div>`).join('');
+ return `<div class="dnc"><h4>${o.t}</h4>${s}<div class="dlist">${lg}</div></div>`;
+}
+function gauge(g){
+ const cx=120,cy=106,r=86,f=Math.min(g.p,150)/150,P=(t,rr=r)=>{const a=Math.PI*(1-t);return[cx+rr*Math.cos(a),cy-rr*Math.sin(a)]};
+ const[x0,y0]=P(0),[x1,y1]=P(1),[xv,yv]=P(f),[ta,tb]=P(2/3,r-14),[tc,td]=P(2/3,r+14),[kx,ky]=P(2/3,r-34);
+ const col=g.st==='win'?C.g:C.a,tcol=g.st==='win'?C.gd:C.ad;
+ return `<div class="gp ${g.st}"><div class="gp-h"><span>${g.l}</span><small>ƯTH năm / KHCS</small></div>
+ <svg viewBox="0 0 240 112"><path d="M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}" fill="none" stroke="#E9EBF2" stroke-width="18"/>
+ <path class="arc" pathLength="100" d="M${x0} ${y0} A${r} ${r} 0 0 1 ${xv} ${yv}" fill="none" stroke="${col}" stroke-width="18" stroke-dasharray="100" style="--c:100;stroke-dashoffset:0"/>
+ <line x1="${ta}" y1="${tb}" x2="${tc}" y2="${td}" stroke="${C.n}" stroke-width="3"/><text x="${kx}" y="${ky+4}" text-anchor="middle" style="font-size:12px;font-weight:700;fill:${C.n}">KH</text>
+ <text x="${cx}" y="${cy-6}" text-anchor="middle" style="font-size:32px;font-weight:700;fill:${tcol}">${fmt(g.p)}%</text></svg>
+ <div class="s">${g.s}</div>${g.x?`<div class="x">${g.x}</div>`:''}</div>`;
+}
+
+/* ===== SLIDE 1 ===== */
+function priceHTML(){
+ const mx=2400,row=(l,v,c,d,dp=2)=>`<div class="pr"><span>${l}</span><div class="trk"><i class="hb" style="width:calc((100% - 92px) * ${v/mx});background:${c};animation-delay:${d}ms"></i><em>${fmt(v,dp)}</em></div></div>`;
+ return `<div class="pb" data-u="sh1"><div class="pb-h"><b>NMĐ Sông Hậu 1</b><span class="chip good">Biên Pc − giá thành +63,5</span></div>
+  ${row('Giá Pc',2130.53,C.n,0)}${row('Giá thành',2067,C.g,120,0)}${row('FMP bq',1465.70,C.nm,240)}</div>
+  <div class="pb" data-u="tb2"><div class="pb-h"><b>NMĐ Thái Bình 2</b><span class="chip good">Biên Pc − giá thành +397,3</span></div>
+  ${row('Giá Pc',2201.30,C.n,300)}${row('Giá thành',1804,C.g,420,0)}</div>`;
+}
+function opsHTML(){
+ const cell=(l,v,u,ch,cl)=>`<div><label>${l}</label><strong>${v}${u?`<small>${u}</small>`:''}</strong><span class="chip ${cl}">${ch}</span></div>`;
+ return `<div class="op" data-u="sh1"><div class="nm"><b>NMĐ Sông Hậu 1</b><span>Vận hành tháng 9</span></div>
+  ${cell('Sự cố','2','','Lò hơi','warn')}${cell('Suất hao nhiệt','9.625,6','kJ/kWh','+0,51% so PPA','warn')}${cell('Điện tự dùng','5,04%','','Thấp hơn định mức','good')}${cell('Công suất khả dụng','2 tổ máy','','Cao hơn định mức','good')}</div>
+  <div class="op" data-u="tb2"><div class="nm"><b>NMĐ Thái Bình 2</b><span>Vận hành tháng 9</span></div>
+  ${cell('Sự cố','1','','Rò xì ống quá nhiệt S2','warn')}${cell('Suất hao nhiệt','10.337','kJ/kWh','+2,11% so PPA','warn')}${cell('Điện tự dùng','6,43%','','Thấp hơn định mức','good')}${cell('Công suất khả dụng','2 tổ máy','','Cao hơn định mức','good')}</div>`;
+}
+function s1(play){
+ const f=$('#s1').dataset.focus;$('#s1k').innerHTML=T9[f].map(card).join('');
+ gbar($('#s1a'),{groups:[{u:'sh1',l:'NMĐ Sông Hậu 1',v:[502.4,354.3,389.0,470]},{u:'tb2',l:'NMĐ Thái Bình 2',v:[382.6,402.3,441.7,690]}],series:SER4a});
+ wfall($('#s1b'),{steps:[{l:'KH tháng 9',v:-94.3,t:'tot',u:'all'},{l:'SH1',v:225.7,t:'d',u:'sh1'},{l:'TB2',v:-12.9,t:'d',u:'tb2'},{l:'Khác',v:12.6,t:'d',u:'oth'},{l:'TH tháng 9',v:131.1,t:'tot',u:'all'}]});
+ $('#s1c').innerHTML=priceHTML();$('#s1d').innerHTML=opsHTML();
+ if(play)countUp($('#s1'));
+}
+/* ===== SLIDE 2 ===== */
+function bulletHTML(){
+ const mx=12000,row=(u,n,v,k,p,note,cl,d)=>`<div class="bl" data-u="${u}"><div class="nm">${n}</div><div class="btrk"><i class="hb" style="width:${v/mx*100}%;background:${cl};animation-delay:${d}ms"></i><div class="mk" style="left:${k/mx*100}%"><span>KH ${fmt(k)}</span></div></div><div class="bv"><b style="color:${cl===C.g?C.gd:C.ad}">${fmt(v)} · ${p}</b><span>${note}</span></div></div>`;
+ return row('sh1','NMĐ Sông Hậu 1',9556.4,10470.5,'91%','Thấp hơn KH 914,1 tỷ',C.g,0)+row('tb2','NMĐ Thái Bình 2',10842.7,9902.5,'110%','Tăng theo sản lượng (116% KHCS)',C.a,200);
+}
+function debtHTML(){
+ const T=20665.2+4968.4,w=v=>v/T*100;
+ return `<div class="debt"><div class="dl"><div style="width:${w(20665.2)}%;border-color:${C.g};color:${C.gd}">Đã thu 20.665,2 (80,6%)</div><div style="width:${w(4968.4)}%;border-color:${C.a};color:${C.ad};text-align:right">Còn phải thu 4.968,4</div></div>
+ <div class="dbar hb"><div data-u="sh1" style="width:${w(8921.5)}%;background:${C.n}">SH1 8.921,5</div><div data-u="tb2" style="width:${w(11743.7)}%;background:${C.g}">TB2 11.743,7</div><div data-u="tb2" class="stripe" style="width:${w(2821.1)}%" title="TB2 T7–8 tạm tính Fc"></div><div data-u="oth" style="width:${w(2147.3)}%;background:#FAD48A"></div></div>
+ <div class="dlg"><span><i class="stripe"></i>TB2 T7–8 tạm tính Fc 703,99 đ/kWh: <b>2.821,1</b> (EVN/EPTC chưa thống nhất)</span><span><i style="background:#FAD48A"></i>Còn lại: <b>2.147,3</b></span></div></div>`;
+}
+function s2(play){
+ const f=$('#s2').dataset.focus;$('#s2k').innerHTML=T9M[f].map(card).join('');
+ gbar($('#s2a'),{groups:[{u:'sh1',l:'NMĐ Sông Hậu 1',v:[5184.1,4749.9,5215.6,4789.3]},{u:'tb2',l:'NMĐ Thái Bình 2',v:[4135.5,5122.4,5608.0,5948.6]}],series:SER4,fs:14});
+ wfall($('#s2b'),{steps:[{l:'KH 9 tháng',v:26.3,t:'tot',u:'all'},{l:'SH1',v:620.0,t:'d',u:'sh1'},{l:'TB2',v:253.5,t:'d',u:'tb2'},{l:'Khác',v:57.5,t:'d',u:'oth'},{l:'TH 9 tháng',v:957.3,t:'tot',u:'all'}]});
+ $('#s2c').innerHTML=donut({t:'Doanh thu',c:'21.417,1',cs:'tỷ đồng',p:[{u:'sh1',l:'SH1',v:9193.1,c:C.n},{u:'tb2',l:'TB2',v:12224.0,c:C.g}]})+
+  donut({t:'Nộp NSNN',c:'1.512,3',cs:'tỷ đồng',p:[{u:'sh1',l:'SH1',v:1031.2,c:C.n},{u:'tb2',l:'TB2',v:476.9,c:C.g},{u:'oth',l:'CQCN',v:4.2,c:C.gr}]});
+ $('#s2d').innerHTML=bulletHTML();$('#s2e').innerHTML=debtHTML();
+ if(play)countUp($('#s2'));
+}
+/* ===== SLIDE 3 ===== */
+const G=[{l:'Sản lượng điện',p:102.3,st:'win',s:'13.189,5 / 12.895,5 tr.kWh',x:'KHQT 14.151,5 – đạt 93%'},
+ {l:'Doanh thu',p:97.2,st:'warn',s:'26.997,9 / 27.767,1 tỷ đồng'},
+ {l:'Chi phí',p:97.1,st:'win',s:'26.778,9 / 27.571,9 tỷ đồng'},
+ {l:'LNST',p:112.2,st:'win',s:'219,0 / 195,2 tỷ đồng',x:'Cao hơn KH 23,8 tỷ'},
+ {l:'Nộp NSNN',p:167.3,st:'win',s:'1.691,6 / 1.011,0 tỷ đồng'}];
+const TABS={sl:'tr.kWh',dt:'tỷ đồng',cp:'tỷ đồng',ln:'tỷ đồng',ns:'tỷ đồng'};
+const lgH=a=>a.map(([n,c,line])=>`<span><i style="background:${c};${line?'height:4px;vertical-align:3px;width:16px':''}"></i>${n}</span>`).join('');
+function tbl(rows,u){return `<table class="tb"><thead><tr><th>Đơn vị (${u})</th><th>Tháng 10</th><th>Tháng 11</th><th>Tháng 12</th><th>Quý IV</th></tr></thead><tbody>${rows.map(([l,a,cl])=>`<tr class="${cl||''}"><td>${l}</td>${a.map((v,i)=>`<td class="${v<0?'ng':''}${i===3?' q':''}">${fmt(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+function s3tab(k){
+ const cv=$('#q4cv'),a3=a=>a.slice(0,3),D=Q4[k];$('#q4u').textContent=TABS[k];
+ const S=[{n:'SH1',c:C.n,v:a3(D.sh1||[])},{n:'TB2',c:C.g,v:a3(D.tb2||[])}];
+ const R=k==='ns'?[['Toàn Chi nhánh',D.cn,'cn']]:[['Toàn Chi nhánh',D.cn,'cn'],['NMĐ Sông Hậu 1',D.sh1],['NMĐ Thái Bình 2',D.tb2]];
+ if(k==='cp'||k==='ln')R.push(['Cơ quan Chi nhánh',D.cq]);
+ $('#q4tb').innerHTML=tbl(R,TABS[k]);
+ if(k==='sl'){stacked(cv,{cats:Q4.m,series:S,tot:a3(D.cn),line:{v:a3(Q4.dt.cn)}});$('#q4lg').innerHTML=lgH([['SH1',C.n],['TB2',C.g],['Doanh thu CN (tỷ đồng)',C.nd,1]])}
+ if(k==='dt'){stacked(cv,{cats:Q4.m,series:S,tot:a3(D.cn)});$('#q4lg').innerHTML=lgH([['SH1',C.n],['TB2',C.g]])}
+ if(k==='cp'){stacked(cv,{cats:Q4.m,series:[...S,{n:'CQCN',c:C.gr,v:a3(D.cq)}],tot:a3(D.cn)});$('#q4lg').innerHTML=lgH([['SH1',C.n],['TB2',C.g],['CQCN',C.gr]])}
+ if(k==='ln'){gbar(cv,{groups:Q4.m.map((m,i)=>({l:m,sub:'Toàn CN '+fmt(D.cn[i]),v:[D.sh1[i],D.tb2[i],D.cq[i]]})),series:[{c:C.n},{c:C.g},{c:C.gr}],sub:1,inner:.7,maxBw:58});$('#q4lg').innerHTML=lgH([['SH1',C.n],['TB2',C.g],['CQCN',C.gr]])}
+ if(k==='ns'){gbar(cv,{groups:Q4.m.map((m,i)=>({l:m,v:[D.cn[i]]})),series:[{c:C.g,hl:1,d:1}],inner:.4,maxBw:110,fs:17});$('#q4lg').innerHTML=lgH([['Toàn Chi nhánh',C.g]])}
+}
+function q4cHTML(){
+ const tr=(v,mx,c,d)=>`<div class="qt"><i class="hb" style="width:calc((100% - 62px) * ${v/mx});background:${c};animation-delay:${d}ms"></i><span>${fmt(v)}</span></div>`;
+ const row=(l,a,b,mx,ch,cl,c2,d)=>`<div class="qr"><div class="ql">${l}</div><div class="qb">${tr(a,mx,C.n,d)}${tr(b,mx,c2,d+150)}</div><span class="chip ${cl} qc">${ch}</span></div>`;
+ const span=168.9+738.3,k=78/span,z=4+738.3*k;
+ const ln=`<div class="qr"><div class="ql">LNST</div><div class="qb">
+  <div class="qd"><div class="z" style="left:${z}%"></div><i class="hb" style="left:${z}%;width:${168.9*k}%;background:${C.n};animation-delay:600ms"></i><span style="left:${z+168.9*k+1.5}%;color:${C.n}">168,9</span></div>
+  <div class="qd"><div class="z" style="left:${z}%"></div><i class="hbr" style="left:${z-738.3*k}%;width:${738.3*k}%;background:${C.a};animation-delay:750ms"></i><span style="left:${z-738.3*k+2}%;color:#fff">−738,3</span></div>
+ </div><span class="chip warn qc">−907,2</span></div>`;
+ return `<div class="qsec">Sản lượng (tr.kWh)</div>${row('SH1',1694.0,1654.6,1694.0,'97,7%','good',C.g,0)}${row('TB2',1329.2,797.0,1694.0,'60,0%','warn',C.a,150)}
+ <div class="qsec">Tài chính (tỷ đồng)</div>${row('Doanh thu',7249.5,5580.8,7249.5,'77,0%','warn',C.a,300)}${row('Chi phí',7080.6,6319.0,7249.5,'89,2%','',C.nm,450)}${ln}`;
+}
+function s3(play){
+ $('#s3g').innerHTML=G.map(gauge).join('');
+ s3tab($('#s3 .stabs button.on').dataset.t);
+ $('#q4c').innerHTML=q4cHTML();
+ $('#q4t').innerHTML=`<h3>Nhiệm vụ trọng tâm Quý IV</h3><ul>
+  <li>Xây dựng KH SXKD năm 2027.</li>
+  <li>Triển khai gói thầu mua than SH1 giai đoạn 2027–2028, ký Hợp đồng khung theo danh sách ngắn.</li>
+  <li>Phê duyệt phạm vi, dự toán BDSCĐK 2027 tại 2 NMĐ; ưu tiên gói vật tư thời gian dài.</li>
+  <li>Rà soát chi phí 2026 tại 2 NMĐ, áp dụng QĐMS 200; lập KHTTMS 2027.</li>
+  <li>Đàm phán EVN/EPTC gia hạn, sửa đổi PPA TB2; mua bộ Catalyst S1, S2 TB2.</li>
+  <li>Hoàn thiện đề án chuyển đổi Chi nhánh thành Công ty TNHH MTV.</li></ul>
+  <div class="kn"><h3>Kiến nghị Petrovietnam</h3><ul>
+  <li>Hỗ trợ đàm phán, sửa đổi PPA TB2 để gia hạn và ký giá điện chính thức.</li>
+  <li>Phân cấp, ủy quyền toàn diện cho PVPGB theo CV 1642/CNPĐ-KTKH-TCHC-TM-KTATMT-TCKT ngày 25/8/2026.</li>
+  <li>Hỗ trợ EVN thanh toán chênh lệch tỷ giá 2022–2024 của SH1 (đang tạm ghi nhận khoảng 509 tỷ đồng).</li></ul></div>`;
+}
+
+/* ===== SLIDE 4 ===== */
+const Y26={
+ cn:{k:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:13189.5,st:'win',r:{p:102.3,t:'102,3%'},b:'▲ Vượt KHCS +2,3%',m:[['KHCS','12.895,5'],['KHQT','93%'],['Năm 2025','+3,9%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:26997.9,st:'warn',r:{p:97.2,t:'97,2%'},b:'▼ 97,2% KHCS',m:[['KHCS','27.767,1'],['Năm 2025','+8,4%']]},
+  {l:'Chi phí',u:'tỷ đồng',v:26778.9,st:'win',r:{p:97.1,t:'97,1%'},b:'▼ Thấp hơn KH 793,0 tỷ',m:[['KHCS','27.571,9'],['Năm 2025','+6,4%']]},
+  {l:'LNST',u:'tỷ đồng',v:219.0,st:'win',r:{p:112.2,t:'112,2%'},b:'▲ Vượt KH +23,8 tỷ',m:[['KH','195,2'],['Năm 2025','−272,5']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:1691.6,st:'win',r:{p:167.3,t:'167,3%'},b:'▲ Vượt KH +67,3%',m:[['KH','1.011,0'],['Năm 2025','+61,5%']]},
+  {l:'Đầu tư TTB, TS',u:'tỷ đồng',v:809.0,st:'warn',r:{p:67.7,t:'67,7%'},b:'▼ 67,7% KH',m:[['KH','1.195,5'],['TH 9 tháng','200,0']]}],
+  sl:[12690.5,13189.5,'+3,9%'],dt:[24897.8,26997.9,'+8,4%'],cp:[25170.2,26778.9,'+6,4%'],ns:[1047.7,1691.6,'+61,5%'],ln:[-272.5,219.0,'+491,5 tỷ'],
+  comp:[['Doanh thu',21417.1,5580.8,27767.1,'97,2% KHCS'],['Chi phí',20459.9,6319.0,27571.9,'97,1% KHCS'],['Nộp NSNN',1512.3,179.3,1011.0,'167,3% KH']]},
+ sh1:{k:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:6443.9,st:'win',r:{p:100,t:'100%'},b:'● Đạt 100% KHCS',m:[['KHCS','6.443,9'],['KHQT','91%'],['Năm 2025','+2,8%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:12728.8,st:'warn',r:{p:92.3,t:'92,3%'},b:'▼ 92,3% KHCS',m:[['KHCS','13.783,7'],['Năm 2025','+10,3%']]},
+  {l:'Chi phí',u:'tỷ đồng',v:13731.6,st:'win',r:{p:94.3,t:'94,3%'},b:'▼ Thấp hơn KH 825,6 tỷ',m:[['KHCS','14.557,2'],['Năm 2025','+6,9%']]},
+  {l:'LNST',u:'tỷ đồng',v:-1002.8,st:'warn',r:null,b:'▼ Lỗ cao hơn KH 229,3 tỷ',m:[['KH','−773,5'],['Năm 2025','−1.307,1']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:1202.0,st:'win',r:{p:204.4,t:'204,4%'},b:'▲ Vượt KH +104,4%',m:[['KH','588,0'],['Năm 2025','+97,1%']]}],
+  sl:[6265.8,6443.9,'+2,8%'],dt:[11539.4,12728.8,'+10,3%'],cp:[12846.5,13731.6,'+6,9%'],ns:[609.8,1202.0,'+97,1%'],ln:[-1307.1,-1002.8,'Giảm lỗ 304,3'],
+  comp:[['Doanh thu',9193.1,3535.7,13783.7,'92,3% KHCS'],['Chi phí',9556.4,4175.2,14557.2,'94,3% KHCS'],['Nộp NSNN',1031.2,170.8,588.0,'204,4% KH']]},
+ tb2:{k:[
+  {l:'Sản lượng điện',u:'tr.kWh',v:6745.6,st:'win',r:{p:104.6,t:'104,6%'},b:'▲ Vượt KHCS +4,6%',m:[['KHCS','6.451,6'],['KHQT','95%'],['Năm 2025','+5,0%']]},
+  {l:'Doanh thu',u:'tỷ đồng',v:14269.0,st:'win',r:{p:102.0,t:'102,0%'},b:'▲ Vượt KHCS +2,0%',m:[['KHCS','13.983,4'],['Năm 2025','+6,8%']]},
+  {l:'Chi phí',u:'tỷ đồng',v:12907.0,st:'warn',r:{p:100.4,t:'100,4%'},b:'▲ Cao hơn KH 48,5 tỷ',m:[['KHCS','12.858,5'],['Năm 2025','+5,5%']]},
+  {l:'LNST',u:'tỷ đồng',v:1362.0,st:'win',r:{p:121.1,t:'121,1%'},b:'▲ Vượt KH +237,1 tỷ',m:[['KH','1.124,9'],['Năm 2025','1.116,1']]},
+  {l:'Nộp NSNN',u:'tỷ đồng',v:479.8,st:'win',r:{p:114.5,t:'114,5%'},b:'▲ Vượt KH +14,5%',m:[['KH','419,0'],['Năm 2025','+10,9%']]}],
+  sl:[6424.7,6745.6,'+5,0%'],dt:[13356.0,14269.0,'+6,8%'],cp:[12239.9,12907.0,'+5,5%'],ns:[432.7,479.8,'+10,9%'],ln:[1116.1,1362.0,'+245,9 tỷ'],
+  comp:[['Doanh thu',12224.0,2045.0,13983.4,'102,0% KHCS'],['Chi phí',10842.7,2064.3,12858.5,'100,4% KHCS'],['Nộp NSNN',476.9,2.9,419.0,'114,5% KH']]}
+};
+function cmpHTML(D){
+ const tr=(v,mx,c,d)=>`<div class="qt"><i class="hb" style="width:calc((100% - 70px) * ${v/mx});background:${c};animation-delay:${d}ms"></i><span>${fmt(v)}</span></div>`;
+ const row=(l,u,[a,b,ch],cl,d)=>{const mx=Math.max(a,b);return `<div class="yr"><div class="ql">${l}<small>${u}</small></div><div class="qb">${tr(a,mx,C.gr,d)}${tr(b,mx,C.g,d+150)}</div><span class="chip ${cl} qc">${ch}</span></div>`};
+ return row('Sản lượng','tr.kWh',D.sl,'good',0)+row('Doanh thu','tỷ đồng',D.dt,'good',150)+row('Chi phí','tỷ đồng',D.cp,'',300)+row('Nộp NSNN','tỷ đồng',D.ns,'good',450)+
+  `<div class="yr"><div class="ql">LNST<small>tỷ đồng</small></div><div class="yl fade" style="animation-delay:700ms"><b style="color:${D.ln[0]<0?C.ad:C.n}">${fmt(D.ln[0])}</b><span>→</span><b style="color:${D.ln[1]<0?C.ad:C.gd}">${fmt(D.ln[1])}</b></div><span class="chip good qc">${D.ln[2]}</span></div>`;
+}
+function compHTML(D){
+ return D.comp.map(([l,a,b,k,ch],i)=>{const mx=Math.max(a+b,k)*1.04,w=(a+b)/mx*100,pa=a/(a+b),warn=l==='Doanh thu'&&a+b<k;
+  return `<div class="cr"><div class="nm">${l}</div><div class="btrk"><div class="cbar hb" style="width:${w}%;animation-delay:${i*180}ms"><b style="flex:${a};background:${C.n}">${pa>.12?fmt(a):''}</b><b style="flex:${b};background:${C.gm}">${1-pa>.12?fmt(b):''}</b></div><div class="mk" style="left:${k/mx*100}%;background:${C.nd}"><span>KH ${fmt(k)}</span></div></div><div class="bv"><b style="color:${warn?C.ad:C.gd}">ƯTH ${fmt(a+b)}</b><span>${ch}</span></div></div>`}).join('');
+}
+function s4(play){
+ const f=$('#s4').dataset.focus,D=Y26[f],k=$('#s4k');
+ k.style.gridTemplateColumns=`repeat(${D.k.length},1fr)`;k.innerHTML=D.k.map(card).join('');
+ gbar($('#s4a'),{groups:[{u:'sh1',l:'NMĐ Sông Hậu 1',v:[6265.8,6443.9,7075.8,[4789.3,1654.6]]},{u:'tb2',l:'NMĐ Thái Bình 2',v:[6424.7,6451.6,7075.8,[5948.6,797.0]]}],series:[{c:C.gr},{c:C.n},{c:C.nm},{cs:[C.g,C.gm]}],fs:14});
+ wfall($('#s4b'),{steps:[{l:'KH năm',v:195.2,t:'tot',u:'all'},{l:'SH1',v:-229.3,t:'d',u:'sh1'},{l:'TB2',v:237.1,t:'d',u:'tb2'},{l:'CQCN',v:16.0,t:'d',u:'oth'},{l:'ƯTH năm',v:219.0,t:'tot',u:'all'}]});
+ const nm={cn:'toàn Chi nhánh',sh1:'NMĐ Sông Hậu 1',tb2:'NMĐ Thái Bình 2'}[f];
+ $('#s4ct').innerHTML=`So với năm 2025<small>${nm}</small>`;$('#s4dt').innerHTML=`Cấu thành ước thực hiện năm<small>tỷ đồng, ${nm}</small>`;
+ $('#s4c').innerHTML=cmpHTML(D);$('#s4d').innerHTML=compHTML(D);
+ if(play)countUp($('#s4'));
+}
+
+/* ===== ĐIỀU HƯỚNG ===== */
+const slides=$$('.slide'),R=[s1,s2,s3,s4];let cur=-1;
+$$('.logo').forEach(el=>el.innerHTML=LOGO_SRC?`<img src="${LOGO_SRC}" alt="PVPGB">`:`<div class="lt"><b>PVPGB</b><span>Chi nhánh Phát điện Dầu khí</span></div>`);
+$('#dots').innerHTML=slides.map((_,i)=>`<i data-i="${i}" title="Slide ${i+1}"></i>`).join('');
+function go(i){
+ i=Math.max(0,Math.min(slides.length-1,i));if(i===cur)return;cur=i;
+ slides.forEach((s,k)=>s.classList.toggle('on',k===i));$$('#dots i').forEach((d,k)=>d.classList.toggle('on',k===i));
+ R[i](true);
+}
+[['#s1',0],['#s2',1],['#s4',3]].forEach(([id,idx])=>$$(id+' .tabs button').forEach(b=>b.onclick=()=>{
+ $$(id+' .tabs button').forEach(x=>x.classList.toggle('on',x===b));$(id).dataset.focus=b.dataset.u;R[idx](true);
+}));
+$$('#s3 .stabs button').forEach(b=>b.onclick=()=>{$$('#s3 .stabs button').forEach(x=>x.classList.toggle('on',x===b));s3tab(b.dataset.t)});
+$('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
+$('#dots').onclick=e=>{if(e.target.dataset.i)go(+e.target.dataset.i)};
+document.addEventListener('keydown',e=>{
+ if(['ArrowRight','PageDown'].includes(e.key)){go(cur+1);e.preventDefault()}
+ else if(['ArrowLeft','PageUp'].includes(e.key)){go(cur-1);e.preventDefault()}
+ else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+});
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);$('#stage').style.transform=`translate(-50%,-50%) scale(${s})`}
+addEventListener('resize',fit);fit();
+addEventListener('beforeprint',()=>{document.body.classList.add('noanim');R.forEach(f=>f(false))});
+addEventListener('afterprint',()=>document.body.classList.remove('noanim'));
+R.forEach(f=>f(false));go(0);
+</script>
+</body>
+</html>
